@@ -23,6 +23,12 @@ class FirestoreService {
     await reference.delete();
   }
 
+  Future<T> getData<T>({@required String path}) async {
+    final reference = FirebaseFirestore.instance.doc(path);
+    print('get: $path');
+    await reference.get();
+  }
+
   Stream<List<T>> collectionStream<T>({
     @required String path,
     @required T Function(Map<String, dynamic> data, String documentID) builder,
