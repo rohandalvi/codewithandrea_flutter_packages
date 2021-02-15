@@ -58,7 +58,7 @@ class FirestoreService {
     });
   }
 
-  Stream<T> documentStream<T>({
+  Stream<List<T>> documentStream<T>({
     @required String path,
     @required T Function(Map<String, dynamic> data, String documentID) builder,
     Query Function(Query query) queryBuilder,
@@ -67,7 +67,13 @@ class FirestoreService {
     if(queryBuilder != null) {
       query = queryBuilder(query);
     }
-    final Stream<DocumentSnapshot> snapshots = query.snapshots();
-    return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
+    final Stream<QuerySnapshot> snapshots = query.snapshots();
+    return snapshots.map((snapshot) {
+      final result = snapshot.docs
+          .map((snapshot) => builder(snapshot.data(), snapshot.id))
+          .where((value) => value != null)
+          .toList();
+      return result;
+    });
   }
 }
