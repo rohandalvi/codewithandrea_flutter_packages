@@ -63,7 +63,7 @@ class FirestoreService {
     @required T Function(Map<String, dynamic> data, String documentID) builder,
     Query Function(Query query) queryBuilder,
   }) {
-    Query query = FirebaseFirestore.instance.doc(path);
+    DocumentReference query = FirebaseFirestore.instance.doc(path);
     if(queryBuilder != null) {
       query = queryBuilder(query);
     }
