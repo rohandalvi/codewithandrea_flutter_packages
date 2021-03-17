@@ -17,6 +17,15 @@ class FirestoreService {
     await reference.set(data, SetOptions(merge: merge));
   }
 
+  Future<DocumentReference> pushDocument({
+
+    @required String collectionPath,
+    @required Map<String, dynamic> data
+  } ) async{
+    final collectionReference = FirebaseFirestore.instance.collection(collectionPath);
+    return await collectionReference.add(data);
+  }
+
   Future<QuerySnapshot> getDocuments<T>({@required String collectionPath}) async {
     final reference = FirebaseFirestore.instance.collection(collectionPath);
     print('collectionPath: $collectionPath');
@@ -27,6 +36,10 @@ class FirestoreService {
     final reference = FirebaseFirestore.instance.doc(path);
     print('delete: $path');
     await reference.delete();
+  }
+
+  DocumentReference getDocumentReference({@required String path}) {
+    return FirebaseFirestore.instance.doc(path);
   }
 
   Future<T> getData<T>({@required String path}) async {
