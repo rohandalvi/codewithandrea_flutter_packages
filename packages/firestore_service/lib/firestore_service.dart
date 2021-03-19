@@ -58,9 +58,13 @@ class FirestoreService {
     if (queryBuilder != null) {
       query = queryBuilder(query);
     }
+    print("Here $query");
     final Stream<QuerySnapshot> snapshots = query.snapshots();
+
     return snapshots.map((snapshot) {
+      print("Found result $snapshot");
       final result = snapshot.docs
+          .where((snapshot) => !snapshot.data().isEmpty)
           .map((snapshot) => builder(snapshot.data(), snapshot.id))
           .where((value) => value != null)
           .toList();
