@@ -42,6 +42,10 @@ class FirestoreService {
     return FirebaseFirestore.instance.doc(path);
   }
 
+  CollectionReference getCollectionReference({@required String collectionPath}) {
+    return FirebaseFirestore.instance.collection(collectionPath);
+  }
+
   Future<T> getData<T>({@required String path}) async {
     final reference = FirebaseFirestore.instance.doc(path);
     print('get: $path');
