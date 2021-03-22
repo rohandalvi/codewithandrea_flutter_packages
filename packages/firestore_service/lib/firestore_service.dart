@@ -64,7 +64,7 @@ class FirestoreService {
     }
     print("Here $query");
     final Stream<QuerySnapshot> snapshots = query.snapshots();
-
+    snapshots.length.then((value) => print('Snapshots length $value'));
     return snapshots.map((snapshot) {
       print("Found result $snapshot");
       final result = snapshot.docs
