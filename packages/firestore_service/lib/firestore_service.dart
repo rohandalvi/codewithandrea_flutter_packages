@@ -54,39 +54,28 @@ class FirestoreService {
 
   Stream<List<T>> collectionStream<T>({
     @required String path,
-    T Function(Map<String, dynamic> data, String documentID) builder,
-    Future<T> Function(Map<String, dynamic> data, String documentID) asyncBuilder,
+    @required T Function(Map<String, dynamic> data, String documentID) builder,
     Query Function(Query query) queryBuilder,
     int Function(T lhs, T rhs) sort,
   }) {
-    if( (builder == null && asyncBuilder == null) || (builder != null && asyncBuilder != null) ) {
-      throw Exception('Specify either a builder OR an async builder function parameter');
-    }
     Query query = FirebaseFirestore.instance.collection(path);
     if (queryBuilder != null) {
       query = queryBuilder(query);
     }
     print("Here $query");
     final Stream<QuerySnapshot> snapshots = query.snapshots();
-
-    return snapshots.map((snapshot) async*{
+    snapshots.length.then((value) => print('Snapshots length $value'));
+    return snapshots.map((snapshot) {
       print("Found result $snapshot");
-      Iterable<QueryDocumentSnapshot> iterable = snapshot.docs
-          .where((snapshot) => snapshot.data().isNotEmpty);
-
-      Iterable<T> intermediateResult;
-      if(builder!=null) {
-        intermediateResult = iterable.map((snapshot) => builder(snapshot.data(), snapshot.id));
-      } else {
-        intermediateResult = iterable.map((snapshot) async =>  asyncBuilder(snapshot.data(), snapshot.id));
-      }
-      final result = intermediateResult
+      final result = snapshot.docs
+          .where((snapshot) => !snapshot.data().isEmpty)
+          .map((snapshot) => builder(snapshot.data(), snapshot.id))
           .where((value) => value != null)
           .toList();
       if (sort != null) {
         result.sort(sort);
       }
-      yield result;
+      return result;
     });
   }
 
