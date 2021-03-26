@@ -69,7 +69,7 @@ class FirestoreService {
       print("Found result $snapshot");
       final result = snapshot.docs
           .where((snapshot) => snapshot.data()!.isNotEmpty)
-          .map((snapshot) => builder(snapshot.data(), snapshot.id))
+          .map((snapshot) => builder(snapshot.data()!, snapshot.id))
           .where((value) => value != null)
           .toList();
       if (sort != null) {
