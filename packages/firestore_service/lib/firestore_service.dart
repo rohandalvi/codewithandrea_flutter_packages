@@ -54,7 +54,7 @@ class FirestoreService {
 
   Stream<List<T>> collectionStream<T>({
     required String path,
-    required T Function(Map<String, dynamic> data, String documentID) builder,
+    required T Function(Map<String, dynamic>? data, String documentID) builder,
     Query Function(Query query)? queryBuilder,
     int Function(T lhs, T rhs)? sort,
   }) {
