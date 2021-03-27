@@ -52,7 +52,7 @@ class FirestoreService {
     await reference.get();
   }
 
-  Stream<List<T>> collectionStream<T>({
+  Stream<List<T>>? collectionStream<T>({
     required String path,
     required T Function(Map<String, dynamic>? data, String documentID) builder,
     Query Function(Query query)? queryBuilder,
@@ -79,7 +79,7 @@ class FirestoreService {
     });
   }
 
-  Stream<T> documentStream<T>({
+  Stream<T>? documentStream<T>({
     required String path,
     required T Function(Map<String, dynamic>? data, String documentID) builder,
   }) {
